@@ -1,29 +1,41 @@
 // Espace pour mettre en pause
-// c pour effacer tout (clear)
-// touche haut pour augmenter la vitesse,
-// touche bas pour diminuer la vitesse.
-// touche d pour colorier 1 colonne /2
+// ↑ pour augmenter la vitesse
+// ↓ pour diminuer la vitesse
+// C pour effacer tout (clear)
+// D pour colorier une colonne sur deux
+// R pour colorier les cellules au hasard (probabilité de 1/2)
 
-int taille = 30;
-Monde monde;
+final int     NB_COLONNES    = 50;
+final int     NB_LIGNES      = 50;
+final boolean DESSINE_GRILLE = false;
+final color   COULEUR_GRILLE = color(200);
+final String  REGLES_BS      = "B2/S";
+// Pour essayer d'autres règles : https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
+
 boolean pause = false;
 int lenteur = 10;
+Monde monde;
 
 void setup() {
   size(900, 900);
   rectMode(CORNER);
-
-  monde = new Monde(taille);
+  monde = new Monde(NB_COLONNES, NB_LIGNES, REGLES_BS);
+  monde.fillRandom(0.25);
+  if (DESSINE_GRILLE)
+    stroke(COULEUR_GRILLE);
+  else
+    noStroke();
 }
 
 void draw() {
-  if (!pause) {
-    if (frameCount % lenteur == 0) {
-      monde.check();
-      monde.update();
-    }
+  if (!pause && frameCount % lenteur == 0) {
+    monde.check();
+    monde.update();
   }
   monde.dessiner();
+  
+  // inverser case au hasard
+  //monde.click(random(monde.w * monde.nbColonnes()), random(monde.w * monde.nbLignes()));
 }
 
 void keyPressed() {
@@ -38,13 +50,15 @@ void keyPressed() {
   }
   else if (keyCode == DOWN) {
     lenteur++;
-    println(lenteur);
   }
   else if (key == 'd') {
-    monde.colonnes();
+    monde.fillColonnes();
+  }
+  else if (key == 'r') {
+    monde.fillRandom();
   }
 }
 
 void mouseReleased() {
-  monde.click();
+  monde.click(mouseX, mouseY);
 }
