@@ -12,7 +12,9 @@
 // Mais pour tableau -> B/S, résultat toujours identique
 
 public final class BSNotationParser {
-  private BSNotationParser(){} // privé pour ne pas pouvoir instancier la classe
+  private BSNotationParser() throws IllegalAccessException {
+    throw new IllegalAccessException("La classe "+getClass().getName()+" ne peu pas être instanciée");
+  }
 
   public static final int MAX_VOISINS_DEFAUT = 8;
 

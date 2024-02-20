@@ -1,10 +1,11 @@
-import java.lang.IllegalArgumentException;
 import java.util.function.Consumer;
 
 class Monde {
   Cellule[][] cellules;
   final float w; // taille d'1 cellule en pixels
   private final ReglesVie regles;
+
+  public static final String REGLES_DEFAUT_BS = "B3/S23"; // règles par défaut, en notation B/S
 
   Monde(int taille) {
     this(taille, taille);
@@ -28,7 +29,7 @@ class Monde {
   }
 
   Monde(int nbColonnes, int nbLignes) {
-    this(nbColonnes, nbLignes, "B3/S23");
+    this(nbColonnes, nbLignes, REGLES_DEFAUT_BS);
   }
 
   void dessiner() {

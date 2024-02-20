@@ -9,7 +9,7 @@ final int     NB_COLONNES    = 100;
 final int     NB_LIGNES      = 100;
 final boolean DESSINE_GRILLE = false;
 final color   COULEUR_GRILLE = color(200);
-final String  REGLES_BS      = "B2/S012345678";
+final String  REGLES_BS      = "B3/S23";
 // Pour essayer d'autres règles : https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
 
 boolean pause = false;
@@ -20,7 +20,7 @@ void setup() {
   size(800, 800);
   rectMode(CORNER);
   monde = new Monde(NB_COLONNES, NB_LIGNES, REGLES_BS);
-  monde.fillRandom(0.25);
+  monde.fillRandom(0.5);
   if (DESSINE_GRILLE)
     stroke(COULEUR_GRILLE);
   else
