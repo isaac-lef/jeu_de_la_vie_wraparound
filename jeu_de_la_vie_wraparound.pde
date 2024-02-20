@@ -5,11 +5,11 @@
 // D pour colorier une colonne sur deux
 // R pour colorier les cellules au hasard (probabilité de 1/2)
 
-final int     NB_COLONNES    = 50;
-final int     NB_LIGNES      = 50;
+final int     NB_COLONNES    = 100;
+final int     NB_LIGNES      = 100;
 final boolean DESSINE_GRILLE = false;
 final color   COULEUR_GRILLE = color(200);
-final String  REGLES_BS      = "B2/S";
+final String  REGLES_BS      = "B18/S18";
 // Pour essayer d'autres règles : https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
 
 boolean pause = false;
@@ -17,7 +17,7 @@ int lenteur = 10;
 Monde monde;
 
 void setup() {
-  size(900, 900);
+  size(800, 800);
   rectMode(CORNER);
   monde = new Monde(NB_COLONNES, NB_LIGNES, REGLES_BS);
   monde.fillRandom(0.25);
