@@ -16,7 +16,7 @@ public final class BSNotationParser {
 
   public static final int MAX_VOISINS_DEFAUT = 8;
 
-  public static boolean[][] parse(String s, int maxVoisins) {
+  public static ReglesVie parse(String s, int maxVoisins) {
     if (s == null || s.isEmpty())
       throw new IllegalArgumentException("La notation ne peut pas être nulle ou vide");
     if (maxVoisins <= 0)
@@ -25,8 +25,8 @@ public final class BSNotationParser {
       throw new IllegalArgumentException("La notation B/S ne concerne que les chiffres, donc ne s'applique pas au dessus de 9 voisins (ici "+maxVoisins+")");
 
     // On parcourt la chaîne de caractères en remplissant un tableau à 2 dimensions : état initial (0 ou 1), nombre de voisins.
-    boolean[][] etats = new boolean[2][maxVoisins+1];
-    int ligne = 0;
+    ReglesVie regles = new ReglesVie(maxVoisins);
+    boolean etat = false;
     char c = s.charAt(0);
     if (c != 'B' && c != 'b' && c != 'S' && c != 's')
       throw new IllegalArgumentException("Notation invalide : "+s+"\nLa Notation B/S doit commencer par un B ou un S");
@@ -34,36 +34,33 @@ public final class BSNotationParser {
     for (int idChar = 0; idChar < s.length(); idChar++) {
       c = s.charAt(idChar);
       if (c == 'B' || c == 'b')
-        ligne = 0;
+        etat = false;
       else if (c == 'S' || c == 's')
-        ligne = 1;
+        etat = true;
       else if (Character.isDigit(c))
-        etats[ligne][Character.digit(c,10)] = true;
+        regles.setEtatFinal(etat, Character.digit(c,10), true);
       else if (c == '/' || c == ' ') {
         /* Ne rien faire, séparateur valide */}
       else
         throw new IllegalArgumentException("Caractère invalide '"+c+"' dans la notation "+s+",en position "+idChar);
     }
     
-    return etats;
+    return regles;
   }
 
-  public static boolean[][] parse(String s) {
+  public static ReglesVie parse(String s) {
     return parse(s, MAX_VOISINS_DEFAUT);
   }
 
-  public static String reverseParse(boolean[][] etats) {
-    if(etats.length != 2)
-      throw new IllegalArgumentException("Un tableau d'états valide doit avoir 2 lignes, ici il y en a "+etats.length);
-
+  public static String reverseParse(ReglesVie regles) {
     StringBuilder sb = new StringBuilder("B");
-    for(int nbVoisins = 0; nbVoisins < etats[0].length; nbVoisins++)
-      if(etats[0][nbVoisins] == true)
+    for(int nbVoisins = 0; nbVoisins < regles.maxVoisins(); nbVoisins++)
+      if(regles.vaVivre(false, nbVoisins))
         sb.append(nbVoisins);
 
     sb.append("/S");
-    for(int nbVoisins = 0; nbVoisins < etats[1].length; nbVoisins++)
-      if(etats[1][nbVoisins] == true)
+    for(int nbVoisins = 0; nbVoisins < regles.maxVoisins(); nbVoisins++)
+      if(regles.vaVivre(true, nbVoisins))
         sb.append(nbVoisins);
 
     return sb.toString();

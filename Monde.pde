@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 class Monde {
   Cellule[][] cellules;
   final float w; // taille d'1 cellule en pixels
-  private final boolean[][] tableauVieVoisins; // stocke et calcule les règles du jeu.
+  private final ReglesVie regles;
 
   Monde(int taille) {
     this(taille, taille);
@@ -23,8 +23,8 @@ class Monde {
       for (int x=0; x<nbColonnes(); x++)
           cellules[y][x] = new Cellule(x * w, y * w, w);
 
-    tableauVieVoisins = BSNotationParser.parse(notationBS);
-    println("Règle : "+BSNotationParser.reverseParse(tableauVieVoisins));
+    regles = new ReglesVie(notationBS);
+    println("Règle : "+regles);
   }
 
   Monde(int nbColonnes, int nbLignes) {
@@ -83,7 +83,7 @@ class Monde {
   void checkCellule(int x, int y) {
     int nbVoisines = nbVoisines(x, y);
 
-    cellules[y][x].vaVivre = tableauVieVoisins[cellules[y][x].vivante ? 1 : 0][nbVoisines];
+    cellules[y][x].vaVivre = regles.vaVivre(cellules[y][x].vivante, nbVoisines);
   }
 
   int nbVoisines(int x, int y) {
